@@ -1,10 +1,8 @@
 package com.practice.mobliesafe.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
 
 import com.practice.mobliesafe.R;
 
@@ -14,7 +12,7 @@ import com.practice.mobliesafe.R;
  * @author Kevin
  * 
  */
-public class Setup4Activity extends Activity {
+public class Setup4Activity extends BaseSetupActivity {
 
 	private SharedPreferences mPref;
 
@@ -26,8 +24,8 @@ public class Setup4Activity extends Activity {
 		mPref = getSharedPreferences("config", MODE_PRIVATE);
 	}
 
-	// 下一页
-	public void next(View view) {
+	@Override
+	public void showNextPage() {
 		startActivity(new Intent(this, LostFindActivity.class));
 		finish();
 
@@ -37,8 +35,8 @@ public class Setup4Activity extends Activity {
 		mPref.edit().putBoolean("configed", true).commit();// 更新sp,表示已经展示过设置向导了,下次进来就不展示啦
 	}
 
-	// 上一页
-	public void previous(View view) {
+	@Override
+	public void showPreviousPage() {
 		startActivity(new Intent(this, Setup3Activity.class));
 		finish();
 
