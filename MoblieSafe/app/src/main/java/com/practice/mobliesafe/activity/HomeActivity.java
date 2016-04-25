@@ -1,9 +1,11 @@
 package com.practice.mobliesafe.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -32,6 +34,15 @@ public class HomeActivity extends Activity{
 
         gvHome = (GridView) findViewById(R.id.gv_home);
         gvHome.setAdapter(new HomeAdapter());
+        gvHome.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                switch (position){
+                    case 8:
+                        startActivity(new Intent(HomeActivity.this,SettingActivity.class));
+                }
+            }
+        });
     }
     private class HomeAdapter extends BaseAdapter {
         @Override
