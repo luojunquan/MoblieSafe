@@ -37,7 +37,7 @@ public class SettingItemView extends RelativeLayout{
     }
 
     private void initView() {
-    // 将自定义好的布局文件设置给当前的SettingItemView
+        // 将自定义好的布局文件设置给当前的SettingItemView
         View.inflate(getContext(), R.layout.view_setting_item, this);
         tvTitle = (TextView) findViewById(R.id.tv_title);
         tvDesc = (TextView) findViewById(R.id.tv_desc);
