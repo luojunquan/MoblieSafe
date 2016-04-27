@@ -64,6 +64,9 @@ public class HomeActivity extends Activity {
                         // 手机防盗
                         showPasswordDialog();
                         break;
+                    case 7:
+                        startActivity(new Intent(HomeActivity.this,AToolsActivity.class));
+                        break;
                     case 8:
                         // 设置中心
                         startActivity(new Intent(HomeActivity.this,
