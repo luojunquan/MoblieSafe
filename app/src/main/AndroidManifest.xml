@@ -38,6 +38,8 @@
         <activity android:name=".activity.ContactActivity"></activity>
         <activity android:name=".activity.AddressActivity"></activity>
         <activity android:name=".activity.AToolsActivity"></activity>
+        <activity android:name=".activity.AddressActivity"></activity>
+        <activity android:name=".activity.DragViewActivity"></activity>
         <receiver android:name=".receiver.BootCompleteReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
