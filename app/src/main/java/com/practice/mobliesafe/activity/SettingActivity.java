@@ -11,19 +11,25 @@ import android.view.View.OnClickListener;
 
 import com.practice.mobliesafe.R;
 import com.practice.mobliesafe.service.AddressService;
+import com.practice.mobliesafe.service.CallSafeService;
 import com.practice.mobliesafe.utils.ServiceStatusUtils;
+import com.practice.mobliesafe.view.SettingClickView;
 import com.practice.mobliesafe.view.SettingItemView;
 
 /**
- * Created by 赖上罗小贱 on 2016/4/25.
+ * 设置中心
+ *
+ * @author Kevin
+ *
  */
 public class SettingActivity extends Activity {
 
     private SettingItemView sivUpdate;// 设置升级
     private SettingItemView sivAddress;// 设置升级
-    private com.practice.mobliesafe.view.SettingClickView scvAddressStyle;// 修改风格
-    private com.practice.mobliesafe.view.SettingClickView scvAddressLocation;// 修改归属地位置
+    private SettingClickView scvAddressStyle;// 修改风格
+    private SettingClickView scvAddressLocation;// 修改归属地位置
     private SharedPreferences mPref;
+    private SettingItemView siv_callsafe;// 黑名单
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +42,40 @@ public class SettingActivity extends Activity {
         initAddressView();
         initAddressStyle();
         initAddressLocation();
+        initBlackView();
+    }
+
+    /**
+     * 初始化黑名单
+     */
+    private void initBlackView() {
+        siv_callsafe = (SettingItemView) findViewById(R.id.siv_callsafe);
+
+        // 根据归属地服务是否运行来更新checkbox
+        boolean serviceRunning = ServiceStatusUtils.isServiceRunning(this,
+                "com.itheima52.mobilesafe.service.CallSafeService");
+
+        if (serviceRunning) {
+            siv_callsafe.setChecked(true);
+        } else {
+            siv_callsafe.setChecked(false);
+        }
+
+        siv_callsafe.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (siv_callsafe.isChecked()) {
+                    siv_callsafe.setChecked(false);
+                    stopService(new Intent(SettingActivity.this,
+                            CallSafeService.class));// 停止归属地服务
+                } else {
+                    siv_callsafe.setChecked(true);
+                    startService(new Intent(SettingActivity.this,
+                            CallSafeService.class));// 开启归属地服务
+                }
+            }
+        });
     }
 
     /**
@@ -115,7 +155,7 @@ public class SettingActivity extends Activity {
      * 修改提示框显示风格
      */
     private void initAddressStyle() {
-        scvAddressStyle = (com.practice.mobliesafe.view.SettingClickView) findViewById(R.id.scv_address_style);
+        scvAddressStyle = (SettingClickView) findViewById(R.id.scv_address_style);
 
         scvAddressStyle.setTitle("归属地提示框风格");
 
@@ -161,7 +201,7 @@ public class SettingActivity extends Activity {
      * 修改归属地显示位置
      */
     private void initAddressLocation() {
-        scvAddressLocation = (com.practice.mobliesafe.view.SettingClickView) findViewById(R.id.scv_address_location);
+        scvAddressLocation = (SettingClickView) findViewById(R.id.scv_address_location);
         scvAddressLocation.setTitle("归属地提示框显示位置");
         scvAddressLocation.setDesc("设置归属地提示框的显示位置");
 

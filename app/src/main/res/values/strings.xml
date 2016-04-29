@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MoblieSafe</string>
+    <string name="title_activity_call_safe">CallSafeActivity</string>
 </resources>

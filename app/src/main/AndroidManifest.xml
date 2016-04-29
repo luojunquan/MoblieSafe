@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.practice.mobliesafe"
     android:versionCode="1"
-    android:versionName="1.0"
-    package="com.practice.mobliesafe">
+    android:versionName="1.0">
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -13,9 +14,9 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />
-    <uses-permission android:name="android.permission.VIBRATE"/>
-    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS"/>
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
         android:allowBackup="true"
@@ -30,31 +31,36 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.HomeActivity"></activity>
-        <activity android:name=".activity.SettingActivity"></activity>
-        <activity android:name=".activity.LostFindActivity"></activity>
-        <activity android:name=".activity.Setup1Activity"></activity>
-        <activity android:name=".activity.Setup2Activity"></activity>
-        <activity android:name=".activity.Setup3Activity"></activity>
-        <activity android:name=".activity.Setup4Activity"></activity>
-        <activity android:name=".activity.ContactActivity"></activity>
-        <activity android:name=".activity.AddressActivity"></activity>
-        <activity android:name=".activity.AToolsActivity"></activity>
-        <activity android:name=".activity.AddressActivity"></activity>
-        <activity android:name=".activity.DragViewActivity"></activity>
-        <receiver android:name=".receiver.BootCompleteReceiver" >
+        <activity android:name=".activity.HomeActivity" />
+        <activity android:name=".activity.SettingActivity" />
+        <activity android:name=".activity.LostFindActivity" />
+        <activity android:name=".activity.Setup1Activity" />
+        <activity android:name=".activity.Setup2Activity" />
+        <activity android:name=".activity.Setup3Activity" />
+        <activity android:name=".activity.Setup4Activity" />
+        <activity android:name=".activity.ContactActivity" />
+        <activity android:name=".activity.AddressActivity" />
+        <activity android:name=".activity.AToolsActivity" />
+        <activity android:name=".activity.AddressActivity" />
+        <activity android:name=".activity.DragViewActivity" />
+        <activity android:name=".activity.CallSafeActivity"></activity>
+        <activity android:name=".activity.CallSafeActivity2"></activity>
+
+        <receiver android:name=".receiver.BootCompleteReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".receiver.SmsReceiver" >
-            <intent-filter android:priority="2147483647" >
+        <receiver android:name=".receiver.SmsReceiver">
+            <intent-filter android:priority="2147483647">
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
 
         <service android:name=".service.LocationService" />
-        <service android:name=".service.AddressService"/>
+        <service android:name=".service.AddressService" />
+        <service android:name=".service.CallSafeService"/>
+
     </application>
 
 </manifest>
