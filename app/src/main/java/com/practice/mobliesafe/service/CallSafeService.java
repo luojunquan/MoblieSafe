@@ -5,14 +5,23 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.ContentObserver;
+import android.net.Uri;
+import android.os.Handler;
 import android.os.IBinder;
+import android.telephony.PhoneStateListener;
 import android.telephony.SmsMessage;
+import android.telephony.TelephonyManager;
 
+import com.android.internal.telephony.ITelephony;
 import com.practice.mobliesafe.db.dao.BlackNumberDao;
+
+import java.lang.reflect.Method;
 
 public class CallSafeService extends Service {
 
     private BlackNumberDao dao;
+    private TelephonyManager tm;
 
     public CallSafeService() {
     }
@@ -28,40 +37,139 @@ public class CallSafeService extends Service {
         super.onCreate();
 
         dao = new BlackNumberDao(this);
-        //³õÊ¼»¯¶ÌĞÅµÄ¹ã²¥
+        //è·å–åˆ°ç³»ç»Ÿçš„ç”µè¯æœåŠ¡
+        tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+
+        MyPhoneStateListener listener = new MyPhoneStateListener();
+
+        tm.listen(listener, PhoneStateListener.LISTEN_CALL_STATE);
+
+
+        //åˆå§‹åŒ–çŸ­ä¿¡çš„å¹¿æ’­
         InnerReceiver innerReceiver = new InnerReceiver();
         IntentFilter intentFilter = new IntentFilter("android.provider.Telephony.SMS_RECEIVED");
         intentFilter.setPriority(Integer.MAX_VALUE);
         registerReceiver(innerReceiver, intentFilter);
     }
 
-    private class InnerReceiver extends BroadcastReceiver {
+    private class MyPhoneStateListener extends PhoneStateListener {
+        //ç”µè¯çŠ¶æ€æ”¹å˜çš„ç›‘å¬
+        @Override
+        public void onCallStateChanged(int state, String incomingNumber) {
+            super.onCallStateChanged(state, incomingNumber);
+//            * @see TelephonyManager#CALL_STATE_IDLE  ç”µè¯é—²ç½®
+//            * @see TelephonyManager#CALL_STATE_RINGING ç”µè¯é“ƒå“çš„çŠ¶æ€
+//            * @see TelephonyManager#CALL_STATE_OFFHOOK ç”µè¯æ¥é€š
+            switch (state){
+                //ç”µè¯é“ƒå“çš„çŠ¶æ€
+                case TelephonyManager.CALL_STATE_RINGING:
+
+                    String mode = dao.findNumber(incomingNumber);
+                    /**
+                     * é»‘åå•æ‹¦æˆªæ¨¡å¼
+                     * 1 å…¨éƒ¨æ‹¦æˆª ç”µè¯æ‹¦æˆª + çŸ­ä¿¡æ‹¦æˆª
+                     * 2 ç”µè¯æ‹¦æˆª
+                     * 3 çŸ­ä¿¡æ‹¦æˆª
+                     */
+                    if(mode.equals("1")|| mode.equals("2")){
+                        System.out.println("æŒ‚æ–­é»‘åå•ç”µè¯å·ç ");
+
+                        Uri uri = Uri.parse("content://call_log/calls");
+
+                        getContentResolver().registerContentObserver(uri,true,new MyContentObserver(new Handler(),incomingNumber));
+
+                        //æŒ‚æ–­ç”µè¯
+                        endCall();
+
+                    }
+                    break;
+            }
+        }
+    }
+
+    private class MyContentObserver extends ContentObserver{
+        String incomingNumber;
+        /**
+         * Creates a content observer.
+         *
+         * @param handler The handler to run {@link #onChange} on, or null if none.
+         * @param incomingNumber
+         */
+        public MyContentObserver(Handler handler, String incomingNumber) {
+            super(handler);
+            this.incomingNumber = incomingNumber;
+        }
+
+        //å½“æ•°æ®æ”¹å˜çš„æ—¶å€™è°ƒç”¨çš„æ–¹æ³•
+        @Override
+        public void onChange(boolean selfChange) {
+
+            getContentResolver().unregisterContentObserver(this);
+
+            deleteCallLog(incomingNumber);
+
+            super.onChange(selfChange);
+        }
+    }
+    //åˆ æ‰ç”µè¯å·ç 
+    private void deleteCallLog(String incomingNumber) {
+
+        Uri uri = Uri.parse("content://call_log/calls");
+
+        getContentResolver().delete(uri,"number=?",new String[]{incomingNumber});
+
+    }
+
+    /**
+     * æŒ‚æ–­ç”µè¯
+     */
+    private void endCall() {
+
+        try {
+            //é€šè¿‡ç±»åŠ è½½å™¨åŠ è½½ServiceManager
+            Class<?> clazz = getClassLoader().loadClass("android.os.ServiceManager");
+            //é€šè¿‡åå°„å¾—åˆ°å½“å‰çš„æ–¹æ³•
+            Method method = clazz.getDeclaredMethod("getService", String.class);
+
+            IBinder iBinder = (IBinder) method.invoke(null, TELEPHONY_SERVICE);
+
+            ITelephony iTelephony = ITelephony.Stub.asInterface(iBinder);
+
+            iTelephony.endCall();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private class InnerReceiver extends BroadcastReceiver{
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            System.out.println("¶ÌĞÅÀ´ÁË");
+            System.out.println("çŸ­ä¿¡æ¥äº†");
 
             Object[] objects = (Object[]) intent.getExtras().get("pdus");
 
-            for (Object object : objects) {// ¶ÌĞÅ×î¶à140×Ö½Ú,
-                // ³¬³öµÄ»°,»á·ÖÎª¶àÌõ¶ÌĞÅ·¢ËÍ,ËùÒÔÊÇÒ»¸öÊı×é,ÒòÎªÎÒÃÇµÄ¶ÌĞÅÖ¸ÁîºÜ¶Ì,ËùÒÔforÑ­»·Ö»Ö´ĞĞÒ»´Î
+            for (Object object : objects) {// çŸ­ä¿¡æœ€å¤š140å­—èŠ‚,
+                // è¶…å‡ºçš„è¯,ä¼šåˆ†ä¸ºå¤šæ¡çŸ­ä¿¡å‘é€,æ‰€ä»¥æ˜¯ä¸€ä¸ªæ•°ç»„,å› ä¸ºæˆ‘ä»¬çš„çŸ­ä¿¡æŒ‡ä»¤å¾ˆçŸ­,æ‰€ä»¥forå¾ªç¯åªæ‰§è¡Œä¸€æ¬¡
                 SmsMessage message = SmsMessage.createFromPdu((byte[]) object);
-                String originatingAddress = message.getOriginatingAddress();// ¶ÌĞÅÀ´Ô´ºÅÂë
-                String messageBody = message.getMessageBody();// ¶ÌĞÅÄÚÈİ
-                //Í¨¹ı¶ÌĞÅµÄµç»°ºÅÂë²éÑ¯À¹½ØµÄÄ£Ê½
+                String originatingAddress = message.getOriginatingAddress();// çŸ­ä¿¡æ¥æºå·ç 
+                String messageBody = message.getMessageBody();// çŸ­ä¿¡å†…å®¹
+                //é€šè¿‡çŸ­ä¿¡çš„ç”µè¯å·ç æŸ¥è¯¢æ‹¦æˆªçš„æ¨¡å¼
                 String mode = dao.findNumber(originatingAddress);
                 /**
-                 * ºÚÃûµ¥À¹½ØÄ£Ê½
-                 * 1 È«²¿À¹½Ø µç»°À¹½Ø + ¶ÌĞÅÀ¹½Ø
-                 * 2 µç»°À¹½Ø
-                 * 3 ¶ÌĞÅÀ¹½Ø
+                 * é»‘åå•æ‹¦æˆªæ¨¡å¼
+                 * 1 å…¨éƒ¨æ‹¦æˆª ç”µè¯æ‹¦æˆª + çŸ­ä¿¡æ‹¦æˆª
+                 * 2 ç”µè¯æ‹¦æˆª
+                 * 3 çŸ­ä¿¡æ‹¦æˆª
                  */
                 if(mode.equals("1")){
-                  abortBroadcast();
+                    abortBroadcast();
                 }else if(mode.equals("3")){
                     abortBroadcast();
                 }
-                //ÖÇÄÜÀ¹½ØÄ£Ê½ ·¢Æ±  ÄãµÄÍ··¢Æ¯ÁÁ ·Ö´Ê
+                //æ™ºèƒ½æ‹¦æˆªæ¨¡å¼ å‘ç¥¨  ä½ çš„å¤´å‘æ¼‚äº® åˆ†è¯
                 if(messageBody.contains("fapiao")){
                     abortBroadcast();
                 }

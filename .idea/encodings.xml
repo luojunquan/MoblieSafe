@@ -1,8 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding" defaultCharsetForPropertiesFiles="UTF-8">
-    <file url="file://$PROJECT_DIR$/app/src/main/java/com/practice/mobliesafe/service/CallSafeService.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/aidl" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/practice/mobliesafe/activity/AppManagerActivity.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/practice/mobliesafe/bean/AppInfo.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/practice/mobliesafe/engine/AppInfos.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/practice/mobliesafe/service/AddressService.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/practice/mobliesafe/service/CallSafeService.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/img1.png" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/img2.png" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/img3.png" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/local_popup_bg.9.png" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_app_manager.xml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/item_app_manager.xml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/item_popup.xml" charset="GBK" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

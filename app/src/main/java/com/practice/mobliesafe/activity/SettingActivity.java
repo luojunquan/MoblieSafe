@@ -9,12 +9,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 
-import com.practice.mobliesafe.R;
 import com.practice.mobliesafe.service.AddressService;
 import com.practice.mobliesafe.service.CallSafeService;
 import com.practice.mobliesafe.utils.ServiceStatusUtils;
 import com.practice.mobliesafe.view.SettingClickView;
 import com.practice.mobliesafe.view.SettingItemView;
+import com.practice.mobliesafe.R;
 
 /**
  * 设置中心

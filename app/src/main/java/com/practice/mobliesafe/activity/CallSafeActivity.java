@@ -26,6 +26,8 @@ import com.practice.mobliesafe.R;
 
 import java.util.List;
 
+;
+
 public class CallSafeActivity extends Activity {
 
     private ListView list_view;
