@@ -53,7 +53,7 @@ public class SettingActivity extends Activity {
 
         // 根据归属地服务是否运行来更新checkbox
         boolean serviceRunning = ServiceStatusUtils.isServiceRunning(this,
-                "com.itheima52.mobilesafe.service.CallSafeService");
+                "com.practice.mobliesafe.service.CallSafeService");
 
         if (serviceRunning) {
             siv_callsafe.setChecked(true);
@@ -124,7 +124,7 @@ public class SettingActivity extends Activity {
 
         // 根据归属地服务是否运行来更新checkbox
         boolean serviceRunning = ServiceStatusUtils.isServiceRunning(this,
-                "com.itheima52.mobilesafe.service.AddressService");
+                "com.practice.mobliesafe.service.AddressService");
 
         if (serviceRunning) {
             sivAddress.setChecked(true);

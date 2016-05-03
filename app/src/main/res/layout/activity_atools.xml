@@ -9,16 +9,33 @@
         android:text="高级工具" />
 
     <TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:drawableLeft="@android:drawable/ic_menu_camera"
+    android:drawablePadding="5dp"
+    android:gravity="center_vertical"
+    android:onClick="numberAddressQuery"
+    android:padding="10dp"
+    android:text="电话归属地查询"
+    android:textColor="#000"
+    android:textSize="20sp" />
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
         android:drawableLeft="@android:drawable/ic_menu_camera"
         android:drawablePadding="5dp"
+        android:onClick="backUpsms"
         android:gravity="center_vertical"
-        android:onClick="numberAddressQuery"
         android:padding="10dp"
-        android:text="电话归属地查询"
+        android:text="短信备份"
         android:textColor="#000"
         android:textSize="20sp" />
+    <ProgressBar
+        android:id="@+id/progressBar1"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

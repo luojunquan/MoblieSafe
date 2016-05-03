@@ -23,6 +23,8 @@
     <uses-permission android:name="android.permission.READ_CALL_LOG"/>
     <uses-permission android:name="android.permission.WRITE_CALL_LOG"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_SMS"/>
+    <uses-permission android:name="android.permission.BROADCAST_SMS"/>
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -36,7 +38,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.HomeActivity" />
+        <activity android:name=".activity.HomeActivity">
+            <intent-filter>
+                <action  android:name="aaa.bbb.ccc"></action>
+                <category android:name="android.intent.category.DEFAULT"></category>
+            </intent-filter>
+        </activity>
         <activity android:name=".activity.SettingActivity" />
         <activity android:name=".activity.LostFindActivity" />
         <activity android:name=".activity.Setup1Activity" />
@@ -51,6 +58,8 @@
         <activity android:name=".activity.CallSafeActivity"/>
         <activity android:name=".activity.CallSafeActivity2"/>
         <activity android:name=".activity.AppManagerActivity"/>
+        <activity android:name=".activity.NumberAddressQueryActivity"/>
+        <activity android:name=".activity.TaskManagerActivity"/>
         <receiver android:name=".receiver.BootCompleteReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
